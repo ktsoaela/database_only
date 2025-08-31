@@ -11,6 +11,7 @@
     "combined": "concurrently \"python backend/app.py\" \"wait-on http://localhost:5001 && electron .\"",
     "test": "jest",
     "lint": "eslint .",
+    "build": "electron-builder",
     "pack": "electron-builder",
     "dist": "electron-builder --publish=never"
   },
@@ -55,16 +56,45 @@
       "**/*",
       "!node_modules/**/*",
       "!dist/**/*",
-      "!*.md"
+      "!*.md",
+      "!test-*.html",
+      "!test-*.py",
+      "!.github/**/*"
     ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ]
+    },
     "mac": {
+      "target": "dmg",
       "category": "public.app-category.developer-tools"
     },
-    "win": {
-      "target": "nsis"
-    },
     "linux": {
-      "target": "AppImage"
+      "target": "AppImage",
+      "category": "Development"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "portable": {
+      "artifactName": "DATABASE-ONLY.exe"
+    },
+    "appImage": {
+      "artifactName": "DATABASE-ONLY.AppImage"
+    },
+    "dmg": {
+      "artifactName": "DATABASE-ONLY.dmg"
     }
   }
 }

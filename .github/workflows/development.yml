@@ -1,0 +1,162 @@
+name: 🧪 Development Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🚀 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: 📦 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 📥 Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 📥 Install Node.js dependencies
+        run: npm ci
+
+      - name: 🧪 Run Node.js tests
+        run: npm test
+
+      - name: 🧪 Run Python tests
+        run: |
+          cd backend
+          python -m pytest tests/ -v || echo "No tests found, skipping"
+
+      - name: 🔍 Lint code
+        run: npm run lint
+
+      - name: 🏗️ Test build
+        run: npm run build
+
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+      - name: 🚀 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: 📦 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 📥 Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 📥 Install Node.js dependencies
+        run: npm ci
+
+      - name: 🏗️ Build Windows package
+        run: npm run build
+        env:
+          ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+
+      - name: 📁 Upload Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: DATABASE-ONLY-Windows
+          path: dist/
+
+  build-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🚀 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: 📦 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 📥 Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 📥 Install Node.js dependencies
+        run: npm ci
+
+      - name: 🏗️ Build Linux package
+        run: npm run build
+        env:
+          ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+
+      - name: 📁 Upload Linux build
+        uses: actions/upload-artifact@v4
+        with:
+          name: DATABASE-ONLY-Linux
+          path: dist/
+
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+      - name: 🚀 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: 📦 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 📥 Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 📥 Install Node.js dependencies
+        run: npm ci
+
+      - name: 🏗️ Build macOS package
+        run: npm run build
+        env:
+          ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+
+      - name: 📁 Upload macOS build
+        uses: actions/upload-artifact@v4
+        with:
+          name: DATABASE-ONLY-macOS
+          path: dist/

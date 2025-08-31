@@ -1,0 +1,199 @@
+name: 🎯 Manual Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+      platform:
+        description: 'Target platform'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - windows
+          - linux
+          - macos
+
+jobs:
+  manual-release:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ${{ matrix.os }}
+        include:
+          - ${{ github.event.inputs.platform == 'all' && 'windows-latest' || github.event.inputs.platform == 'windows' && 'windows-latest' || 'skip' }}:
+              os: windows-latest
+              platform: win
+              ext: .exe
+          - ${{ github.event.inputs.platform == 'all' && 'ubuntu-latest' || github.event.inputs.platform == 'linux' && 'ubuntu-latest' || 'skip' }}:
+              os: ubuntu-latest
+              platform: linux
+              ext: .AppImage
+          - ${{ github.event.inputs.platform == 'all' && 'macos-latest' || github.event.inputs.platform == 'macos' && 'macos-latest' || 'skip' }}:
+              os: macos-latest
+              platform: mac
+              ext: .dmg
+        exclude:
+          - os: skip
+
+    steps:
+      - name: 🚀 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: 📦 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 📥 Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 📥 Install Node.js dependencies
+        run: npm ci
+
+      - name: 🏗️ Build application
+        run: |
+          echo "Building DATABASE ONLY ${{ github.event.inputs.version }} for ${{ matrix.platform }}..."
+          npm run build
+        env:
+          ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+
+      - name: 📦 Package application
+        run: |
+          echo "Packaging for ${{ matrix.platform }}..."
+          npm run dist
+        env:
+          ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
+          ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+
+      - name: 📁 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: DATABASE-ONLY-${{ matrix.platform }}-${{ github.event.inputs.version }}
+          path: |
+            dist/*.exe
+            dist/*.AppImage
+            dist/*.dmg
+            dist/*.zip
+            dist/win-unpacked/
+            dist/linux-unpacked/
+            dist/mac/
+
+  create-manual-release:
+    needs: manual-release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 🚀 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/
+
+      - name: 🏷️ Create Manual Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          release_name: DATABASE ONLY ${{ github.event.inputs.version }} - Manual Release
+          body: |
+            ## 🎉 DATABASE ONLY ${{ github.event.inputs.version }}
+
+            ### 📋 **Manual Release Information**
+            This release was created manually via GitHub Actions.
+
+            ### ✨ **Features**
+            - Multi-database support (SQLite, MySQL, PostgreSQL, MSSQL)
+            - Professional SQL editor with Monaco Editor
+            - Interactive schema explorer
+            - CRUD operations interface
+            - Beautiful, modern homepage
+            - Cross-platform compatibility
+
+            ### 🗄️ **Supported Databases**
+            - **SQLite** - File-based database with file browser integration
+            - **MySQL** - Popular open-source relational database
+            - **PostgreSQL** - Advanced enterprise database
+            - **Microsoft SQL Server** - Enterprise database system
+
+            ### 🚀 **Installation**
+            1. Download the appropriate package for your platform
+            2. Install Node.js (v16+) and Python (v3.8+)
+            3. Extract and run the application
+            4. Follow the on-screen instructions
+
+            ### 🔧 **System Requirements**
+            - Windows 10/11, macOS 10.15+, or Linux (Ubuntu 18.04+)
+            - Node.js v16 or higher
+            - Python 3.8 or higher
+
+            ### 📱 **Platforms**
+            - **Windows**: .exe installer and portable zip
+            - **macOS**: .dmg installer
+            - **Linux**: .AppImage and portable tar.gz
+
+            ### 📚 **Documentation**
+            - See `USER_GUIDE.md` for detailed instructions
+            - Visit our [GitHub repository](https://github.com/ktsoaela/database_only) for support
+
+            ### 🔄 **Release Notes**
+            - Manual release created on ${{ github.event.inputs.platform }} platform(s)
+            - Full database management capabilities
+            - Professional SQL editor with syntax highlighting
+            - Interactive schema exploration
+            - CRUD operations interface
+            - Modern, responsive UI
+
+            ---
+
+            **Built with ❤️ by Khotso Tsoaela**
+
+            *Making professional database management accessible to everyone*
+
+            ### 📥 **Downloads**
+            - Windows: Download the .exe file for easy installation
+            - macOS: Download the .dmg file for macOS
+            - Linux: Download the .AppImage for Linux
+            - All platforms: Download the portable zip for manual setup
+
+          draft: false
+          prerelease: false
+
+      - name: 📤 Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/
+          asset_name: DATABASE-ONLY-${{ github.event.inputs.version }}-${{ github.event.inputs.platform }}
+          asset_content_type: application/octet-stream
+
+      - name: 🎯 Release Summary
+        run: |
+          echo "🎉 Manual Release created successfully!"
+          echo "Version: ${{ github.event.inputs.version }}"
+          echo "Platform: ${{ github.event.inputs.platform }}"
+          echo "Release URL: ${{ steps.create_release.outputs.html_url }}"
+          echo ""
+          echo "📦 Build artifacts uploaded:"
+          ls -la dist/

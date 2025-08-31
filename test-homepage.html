@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Homepage - DATABASE ONLY</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .test-button:hover {
+            background: #5a6fd8;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 DATABASE ONLY - Homepage Test</h1>
+        
+        <div class="status info">
+            <strong>Test Instructions:</strong> This page helps you test the homepage functionality before building the full application.
+        </div>
+
+        <h2>📱 Test Homepage</h2>
+        <button class="test-button" onclick="testHomepage()">Open Homepage in New Tab</button>
+        
+        <h2>🚀 Test Application Launch</h2>
+        <button class="test-button" onclick="testLaunchApp()">Test Launch App Function</button>
+        
+        <h2>📥 Test Download Functions</h2>
+        <button class="test-button" onclick="testDownloadWindows()">Test Windows Download</button>
+        <button class="test-button" onclick="testDownloadMac()">Test macOS Download</button>
+        <button class="test-button" onclick="testDownloadLinux()">Test Linux Download</button>
+        
+        <h2>🔗 Test GitHub Links</h2>
+        <button class="test-button" onclick="testGitHubLinks()">Test All GitHub Links</button>
+        
+        <div id="test-results"></div>
+        
+        <div class="status info">
+            <strong>Note:</strong> The homepage should work in any modern web browser. The actual application requires Electron to run.
+        </div>
+    </div>
+
+    <script>
+        function testHomepage() {
+            try {
+                window.open('homepage.html', '_blank');
+                showResult('✅ Homepage opened successfully in new tab', 'success');
+            } catch (error) {
+                showResult('❌ Error opening homepage: ' + error.message, 'error');
+            }
+        }
+
+        function testLaunchApp() {
+            try {
+                // Simulate the launch app function
+                showResult('🚀 Launch App function called (would launch Electron app in production)', 'success');
+            } catch (error) {
+                showResult('❌ Error in launch app function: ' + error.message, 'error');
+            }
+        }
+
+        function testDownloadWindows() {
+            try {
+                window.open('https://github.com/ktsoaela/database_only/releases', '_blank');
+                showResult('✅ Windows download link opened successfully', 'success');
+            } catch (error) {
+                showResult('❌ Error opening Windows download: ' + error.message, 'error');
+            }
+        }
+
+        function testDownloadMac() {
+            try {
+                window.open('https://github.com/ktsoaela/database_only/releases', '_blank');
+                showResult('✅ macOS download link opened successfully', 'success');
+            } catch (error) {
+                showResult('❌ Error opening macOS download: ' + error.message, 'error');
+            }
+        }
+
+        function testDownloadLinux() {
+            try {
+                window.open('https://github.com/ktsoaela/database_only/releases', '_blank');
+                showResult('✅ Linux download link opened successfully', 'success');
+            } catch (error) {
+                showResult('❌ Error opening Linux download: ' + error.message, 'error');
+            }
+        }
+
+        function testGitHubLinks() {
+            try {
+                const links = [
+                    'https://github.com/ktsoaela/database_only',
+                    'https://github.com/ktsoaela/database_only/releases'
+                ];
+                
+                links.forEach(link => {
+                    window.open(link, '_blank');
+                });
+                
+                showResult('✅ All GitHub links opened successfully', 'success');
+            } catch (error) {
+                showResult('❌ Error opening GitHub links: ' + error.message, 'error');
+            }
+        }
+
+        function showResult(message, type) {
+            const resultsDiv = document.getElementById('test-results');
+            const resultElement = document.createElement('div');
+            resultElement.className = `status ${type}`;
+            resultElement.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            resultsDiv.appendChild(resultElement);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                resultElement.remove();
+            }, 5000);
+        }
+
+        // Auto-test on page load
+        window.addEventListener('load', () => {
+            showResult('🚀 Test page loaded successfully. Ready to test homepage functionality!', 'success');
+        });
+    </script>
+</body>
+</html>
