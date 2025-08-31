@@ -164,6 +164,7 @@ jobs:
           prerelease: false
 
       - name: 📤 Upload Release Assets
+        if: secrets.GITHUB_TOKEN != ''
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -180,8 +181,7 @@ jobs:
           echo "Version: ${{ github.ref_name }}"
           echo "Release URL: ${{ steps.create_release.outputs.html_url }}"
           
-      - name: 📦 Upload Build Artifacts (Fallback)
-        if: failure()
+      - name: 📦 Upload Build Artifacts (Always)
         uses: actions/upload-artifact@v4
         with:
           name: DATABASE-ONLY-${{ github.ref_name }}-Builds
