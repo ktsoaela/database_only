@@ -58,6 +58,7 @@ jobs:
         env:
           ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
           ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 
       - name: 📦 Package application
         run: |
@@ -66,6 +67,7 @@ jobs:
         env:
           ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
           ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 
       - name: 📁 Upload build artifacts
         uses: actions/upload-artifact@v4
