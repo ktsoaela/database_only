@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DATABASE ONLY - DATABASE ONLY</title>
+    <link rel="stylesheet" href="homepage.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-database"></i>
+                    <h1>DATABASE ONLY</h1>
+                </div>
+                <nav class="nav">
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#databases" class="nav-link">Databases</a>
+                    <a href="#download" class="nav-link">Download</a>
+                    <a href="#about" class="nav-link">About</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>🚀 Built for Developers</span>
+                </div>
+                <h1 class="hero-title">DATABASE ONLY</h1>
+                <p class="hero-subtitle">Professional Database Management Tool</p>
+                <p class="hero-description">
+                    A powerful, free alternative to expensive database management tools. 
+                    Built with Electron and Flask for cross-platform compatibility.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="launchApp()">
+                        <i class="fas fa-rocket"></i>
+                        Launch Application
+                    </button>
+                    <button class="btn btn-secondary" onclick="downloadApp()">
+                        <i class="fas fa-download"></i>
+                        Download
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Free</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">4+</span>
+                        <span class="stat-label">Databases</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">∞</span>
+                        <span class="stat-label">Possibilities</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="app-preview">
+                    <div class="app-window">
+                        <div class="app-header">
+                            <div class="app-controls">
+                                <span class="control red"></span>
+                                <span class="control yellow"></span>
+                                <span class="control green"></span>
+                            </div>
+                        </div>
+                        <div class="app-content">
+                            <div class="sidebar-preview">
+                                <div class="connection-item-preview">
+                                    <i class="fas fa-database"></i>
+                                    <span>Demo Database</span>
+                                </div>
+                                <div class="connection-item-preview">
+                                    <i class="fas fa-server"></i>
+                                    <span>Production DB</span>
+                                </div>
+                            </div>
+                            <div class="editor-preview">
+                                <div class="query-preview">SELECT * FROM users;</div>
+                                <div class="query-preview">WHERE status = 'active';</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <div class="section-header">
+                <h2>Powerful Features</h2>
+                <p>Everything you need for professional database management</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3>Multi-Database Support</h3>
+                    <p>Connect to SQLite, MySQL, PostgreSQL, and Microsoft SQL Server databases seamlessly.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Advanced SQL Editor</h3>
+                    <p>Professional Monaco Editor with syntax highlighting, auto-completion, and query formatting.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-table"></i>
+                    </div>
+                    <h3>Schema Explorer</h3>
+                    <p>Browse database structure, view table schemas, and explore relationships with ease.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Query History</h3>
+                    <p>Track all your queries with execution times and results for better productivity.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <h3>CRUD Operations</h3>
+                    <p>Insert, update, delete, and view records through an intuitive interface like Adminer.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure Connections</h3>
+                    <p>Manage connection profiles securely with encrypted credentials and connection testing.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Database Support Section -->
+        <section id="databases" class="databases">
+            <div class="section-header">
+                <h2>Supported Databases</h2>
+                <p>Connect to all major database systems</p>
+            </div>
+            <div class="database-grid">
+                <div class="database-card sqlite">
+                    <div class="database-icon">
+                        <i class="fas fa-file-database"></i>
+                    </div>
+                    <h3>SQLite</h3>
+                    <p>Lightweight, file-based database perfect for development and small applications.</p>
+                    <ul>
+                        <li>File browser integration</li>
+                        <li>No server setup required</li>
+                        <li>Perfect for development</li>
+                    </ul>
+                </div>
+                <div class="database-card mysql">
+                    <div class="database-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>MySQL</h3>
+                    <p>Popular open-source relational database with excellent performance and reliability.</p>
+                    <ul>
+                        <li>High performance</li>
+                        <li>Wide community support</li>
+                        <li>Enterprise ready</li>
+                    </ul>
+                </div>
+                <div class="database-card postgresql">
+                    <div class="database-icon">
+                        <i class="fas fa-elephant"></i>
+                    </div>
+                    <h3>PostgreSQL</h3>
+                    <p>Advanced open-source database with enterprise features and extensibility.</p>
+                    <ul>
+                        <li>ACID compliance</li>
+                        <li>Advanced features</li>
+                        <li>Highly extensible</li>
+                    </ul>
+                </div>
+                <div class="database-card mssql">
+                    <div class="database-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>Microsoft SQL Server</h3>
+                    <p>Enterprise-grade database system with advanced analytics and business intelligence.</p>
+                    <ul>
+                        <li>Enterprise features</li>
+                        <li>Advanced analytics</li>
+                        <li>Business intelligence</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download Section -->
+        <section id="download" class="download">
+            <div class="section-header">
+                <h2>Get Started Today</h2>
+                <p>Download and start managing your databases professionally</p>
+            </div>
+            <div class="download-options">
+                <div class="download-card">
+                    <h3>Windows</h3>
+                    <p>Download for Windows 10/11</p>
+                    <button class="btn btn-primary" onclick="downloadWindows()">
+                        <i class="fab fa-windows"></i>
+                        Download for Windows
+                    </button>
+                </div>
+                <div class="download-card">
+                    <h3>macOS</h3>
+                    <p>Download for macOS 10.15+</p>
+                    <button class="btn btn-primary" onclick="downloadMac()">
+                        <i class="fab fa-apple"></i>
+                        Download for macOS
+                    </button>
+                </div>
+                <div class="download-card">
+                    <h3>Linux</h3>
+                    <p>Download for Ubuntu 18.04+</p>
+                    <button class="btn btn-primary" onclick="downloadLinux()">
+                        <i class="fab fa-linux"></i>
+                        Download for Linux
+                    </button>
+                </div>
+            </div>
+            <div class="source-code">
+                <h3>Open Source</h3>
+                <p>View the source code on GitHub</p>
+                <button class="btn btn-outline" onclick="viewSource()">
+                    <i class="fab fa-github"></i>
+                    View on GitHub
+                </button>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="section-header">
+                <h2>About DATABASE ONLY</h2>
+                <p>Building powerful tools for developers</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        DATABASE ONLY is a free, open-source alternative to expensive database management tools 
+                        like JetBrains DataGrip. Built with modern technologies including Electron and Flask, 
+                        it provides a professional-grade experience for database administrators and developers.
+                    </p>
+                    <p>
+                        Our mission is to democratize database management by providing powerful, 
+                        user-friendly tools that don't break the bank. Whether you're a student, 
+                        freelancer, or enterprise developer, DATABASE ONLY has the features you need.
+                    </p>
+                </div>
+                <div class="tech-stack">
+                    <h3>Built With</h3>
+                    <div class="tech-icons">
+                        <div class="tech-item">
+                            <i class="fab fa-node-js"></i>
+                            <span>Node.js</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fab fa-js"></i>
+                            <span>Electron</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fab fa-python"></i>
+                            <span>Python</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-flask"></i>
+                            <span>Flask</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>DATABASE ONLY</h4>
+                    <p>Professional database management tools for everyone.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#databases">Databases</a></li>
+                        <li><a href="#download">Download</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Issues</a></li>
+                        <li><a href="#">Community</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 DATABASE ONLY. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="homepage.js"></script>
+</body>
+</html>

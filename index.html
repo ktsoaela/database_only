@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DATABASE ONLY</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1><i class="fas fa-database"></i> DATABASE ONLY</h1>
+                <span class="version">v1.0.0</span>
+            </div>
+            <div class="header-right">
+                <button id="newConnectionBtn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> New Connection
+                </button>
+                <button id="settingsBtn" class="btn btn-secondary">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Connections</h3>
+                    <button id="toggleSidebar" class="btn-icon">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                
+                <div class="connections-list" id="connectionsList">
+                    <!-- Connections will be populated here -->
+                </div>
+                
+                <div class="sidebar-footer">
+                    <button id="importConnections" class="btn btn-outline">
+                        <i class="fas fa-download"></i> Import
+                    </button>
+                    <button id="exportConnections" class="btn btn-outline">
+                        <i class="fas fa-upload"></i> Export
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Editor Area -->
+            <div class="editor-area">
+                <!-- Connection Status Bar -->
+                <div class="connection-status" id="connectionStatus">
+                    <div class="status-indicator disconnected"></div>
+                    <span class="status-text">Not Connected</span>
+                    <div class="connection-info" id="connectionInfo"></div>
+                </div>
+
+                <!-- Editor Tabs -->
+                <div class="editor-tabs" id="editorTabs">
+                    <div class="tab active" data-tab="query">
+                        <i class="fas fa-code"></i> Query Editor
+                    </div>
+                    <div class="tab" data-tab="results">
+                        <i class="fas fa-table"></i> Results
+                    </div>
+                    <div class="tab" data-tab="schema">
+                        <i class="fas fa-sitemap"></i> Schema
+                    </div>
+                    <div class="tab" data-tab="crud">
+                        <i class="fas fa-edit"></i> CRUD
+                    </div>
+                    <div class="tab" data-tab="history">
+                        <i class="fas fa-history"></i> History
+                    </div>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- Query Editor Tab -->
+                    <div class="tab-pane active" id="queryTab">
+                        <div class="query-toolbar">
+                            <div class="query-actions">
+                                <button id="runQueryBtn" class="btn btn-success" disabled>
+                                    <i class="fas fa-play"></i> Run Query
+                                </button>
+                                <button id="formatQueryBtn" class="btn btn-secondary">
+                                    <i class="fas fa-magic"></i> Format
+                                </button>
+                                <button id="clearQueryBtn" class="btn btn-secondary">
+                                    <i class="fas fa-eraser"></i> Clear
+                                </button>
+                            </div>
+                            <div class="query-options">
+                                <label>
+                                    <input type="checkbox" id="autoCommit" checked>
+                                    Auto Commit
+                                </label>
+                                <select id="queryType">
+                                    <option value="auto">Auto Detect</option>
+                                    <option value="select">SELECT</option>
+                                    <option value="insert">INSERT</option>
+                                    <option value="update">UPDATE</option>
+                                    <option value="delete">DELETE</option>
+                                    <option value="ddl">DDL</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="query-editor-container">
+                            <div id="queryEditor" class="query-editor"></div>
+                        </div>
+                    </div>
+
+                    <!-- Results Tab -->
+                    <div class="tab-pane" id="resultsTab">
+                        <div class="results-toolbar">
+                            <div class="results-info">
+                                <span id="resultsCount">0 rows</span>
+                                <span id="executionTime">0ms</span>
+                            </div>
+                            <div class="results-actions">
+                                <button id="exportResultsBtn" class="btn btn-secondary">
+                                    <i class="fas fa-download"></i> Export
+                                </button>
+                                <button id="copyResultsBtn" class="btn btn-secondary">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="results-container">
+                            <div id="resultsTable" class="results-table"></div>
+                        </div>
+                    </div>
+
+                    <!-- Schema Tab -->
+                    <div class="tab-pane" id="schemaTab">
+                        <div class="schema-toolbar">
+                            <div class="schema-filters">
+                                <input type="text" id="schemaSearch" placeholder="Search tables, columns...">
+                                <select id="schemaFilter">
+                                    <option value="all">All Objects</option>
+                                    <option value="tables">Tables</option>
+                                    <option value="views">Views</option>
+                                    <option value="procedures">Procedures</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="schema-container">
+                            <div id="schemaTree" class="schema-tree"></div>
+                        </div>
+                    </div>
+
+                    <!-- CRUD Tab -->
+                    <div class="tab-pane" id="crudTab">
+                        <div class="crud-toolbar">
+                            <div class="crud-actions">
+                                <button id="refreshTableBtn" class="btn btn-secondary">
+                                    <i class="fas fa-sync"></i> Refresh
+                                </button>
+                                <button id="addRecordBtn" class="btn btn-success">
+                                    <i class="fas fa-plus"></i> Add Record
+                                </button>
+                            </div>
+                            <div class="crud-table-selector">
+                                <select id="crudTableSelect">
+                                    <option value="">Select Table</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="crud-container">
+                            <div id="crudTableContainer" class="crud-table-container">
+                                <div class="crud-placeholder">
+                                    <i class="fas fa-table"></i>
+                                    <h3>Select a table to view and edit data</h3>
+                                    <p>Choose a table from the dropdown above to start managing your data</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Tab -->
+                    <div class="tab-pane" id="historyTab">
+                        <div class="history-toolbar">
+                            <button id="clearHistoryBtn" class="btn btn-secondary">
+                                <i class="fas fa-trash"></i> Clear History
+                            </button>
+                        </div>
+                        
+                        <div class="history-container">
+                            <div id="queryHistory" class="query-history"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="connectionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>New Database Connection</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="connectionForm">
+                    <div class="form-group">
+                        <label for="connectionName">Connection Name</label>
+                        <input type="text" id="connectionName" required placeholder="My Database">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="databaseType">Database Type</label>
+                        <select id="databaseType" required>
+                            <option value="">Select Database Type</option>
+                            <option value="mysql">MySQL</option>
+                            <option value="postgresql">PostgreSQL</option>
+                            <option value="sqlite">SQLite</option>
+                            <option value="mssql">Microsoft SQL Server</option>
+                        </select>
+                    </div>
+                    
+                    <!-- MySQL/PostgreSQL/SQL Server fields -->
+                    <div id="serverFields" class="form-fields" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="host">Host</label>
+                                <input type="text" id="host" placeholder="localhost">
+                            </div>
+                            <div class="form-group">
+                                <label for="port">Port</label>
+                                <input type="number" id="port" placeholder="3306">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" placeholder="root">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" placeholder="password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="database">Database</label>
+                            <input type="text" id="database" placeholder="database_name">
+                        </div>
+                    </div>
+                    
+                    <!-- SQLite fields -->
+                    <div id="sqliteFields" class="form-fields" style="display: none;">
+                        <div class="form-group">
+                            <label for="sqlitePath">Database File</label>
+                            <div class="file-input-group">
+                                <input type="text" id="sqlitePath" readonly placeholder="Select SQLite database file">
+                                <button type="button" id="browseSqliteBtn" class="btn btn-secondary">Browse</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="connectionColor">Connection Color</label>
+                        <input type="color" id="connectionColor" value="#007bff">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="testConnectionBtn" class="btn btn-secondary">
+                            <i class="fas fa-plug"></i> Test Connection
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Connection
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-tabs">
+                    <div class="settings-tab active" data-tab="general">General</div>
+                    <div class="settings-tab" data-tab="editor">Editor</div>
+                    <div class="settings-tab" data-tab="database">Database</div>
+                </div>
+                
+                <div class="settings-content">
+                    <div class="settings-pane active" id="generalSettings">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="autoConnect" checked>
+                                Auto-connect to last used connection
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="saveQueries" checked>
+                                Save query history
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-pane" id="editorSettings">
+                        <div class="form-group">
+                            <label for="editorTheme">Editor Theme</label>
+                            <select id="editorTheme">
+                                <option value="vs">Light</option>
+                                <option value="vs-dark">Dark</option>
+                                <option value="hc-black">High Contrast</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fontSize">Font Size</label>
+                            <input type="number" id="fontSize" value="14" min="10" max="24">
+                        </div>
+                    </div>
+                    
+                    <div class="settings-pane" id="databaseSettings">
+                        <div class="form-group">
+                            <label for="queryTimeout">Query Timeout (seconds)</label>
+                            <input type="number" id="queryTimeout" value="30" min="5" max="300">
+                        </div>
+                        <div class="form-group">
+                            <label for="maxResults">Max Results</label>
+                            <input type="number" id="maxResults" value="1000" min="100" max="10000">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="resetSettings">Reset to Defaults</button>
+                    <button type="button" class="btn btn-primary" id="saveSettings">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Connecting to database...</div>
+    </div>
+
+    <!-- CRUD Record Modal -->
+    <div id="crudRecordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="crudModalTitle">Add New Record</h2>
+                <button class="modal-close" onclick="closeCrudModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="crudRecordForm">
+                    <div id="crudFormFields">
+                        <!-- Dynamic form fields will be generated here -->
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeCrudModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="crudSubmitBtn">Save Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+    <script src="renderer.js"></script>
+</body>
+</html>
