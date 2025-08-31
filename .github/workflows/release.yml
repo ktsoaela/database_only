@@ -172,9 +172,18 @@ jobs:
           asset_path: dist/
           asset_name: DATABASE-ONLY-${{ github.ref_name }}-${{ matrix.platform }}
           asset_content_type: application/octet-stream
+        continue-on-error: true
 
       - name: 🎯 Update Release with Assets
         run: |
           echo "Release created successfully!"
           echo "Version: ${{ github.ref_name }}"
           echo "Release URL: ${{ steps.create_release.outputs.html_url }}"
+          
+      - name: 📦 Upload Build Artifacts (Fallback)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DATABASE-ONLY-${{ github.ref_name }}-Builds
+          path: dist/
+          retention-days: 30
